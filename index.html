@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FinalSales</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/jquery.mobile.flatui.min.css"/>
+        <link rel="stylesheet" href="css/indexCSS.css"/>
+
+        <script src="js/bdFuncoes.js"></script>
+
+        <style>
+            table, td, th {    
+                border: 1px solid #ddd;
+                text-align: center !important;
+            }
+
+            tr:nth-child(even) {
+                background: #e9e9e9;
+            }
+
+            tr {
+                border-bottom: 1px solid lightgray;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- TODA A APLICAÇÃO -->
+        <div id="app" style="display: none;">
+            <!-- Página Inicial -->
+            <div id="index" data-role="page" data-theme="d">
+                <div data-role="header" data-position="fixed">
+                    <h1 class="texto">Final Sales</h1>
+                    <a href="#menu" class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext" data-transition="pop">Menu</a>
+                    <a href="#info" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext" data-transition="pop">info</a>
+                </div>
+
+                <div data-role="main" class="ui-content" data-theme="a">
+                    <center>
+                        <br>
+                        <br>
+                        <img src="css/images/logo.png" height="128" width="260">
+                        <br>
+                        <br>                   
+                    </center>
+                    <script>
+                        getAniversariantesMes();
+                    </script>
+
+                    <div data-role="collapsible-set" data-theme="a" data-content-theme="a">
+                        <!--
+                        <div data-role="collapsible" data-collapsed-icon="clock" data-expanded-icon="flat-cross">
+                            <h3 class="texto">Visitas do Mês</h3>
+
+                            <center>
+
+                            </center>
+                        </div>
+                        -->
+
+                        <div data-role="collapsible" data-collapsed-icon="calendar" data-expanded-icon="flat-cross">
+                            <h3 class="texto">Aniversariantes do Mês</h3>
+
+                            <center>
+                                <table data-role="table" data-mode="columntoggle:none" class="ui-responsive" id="table_aniversarios">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Data</th>
+                                            <th colspan='2'>Opções</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </center>
+                        </div>
+
+                        <div data-role="collapsible" data-collapsed-icon="shop" data-expanded-icon="flat-cross">
+                            <h3 class="texto">Produtos vendidos do dia</h3>
+
+                            <script>
+                                obterFornecedores("fornPedidosDoDia","txt_fornecedoresInicio");
+                            </script>
+
+                            <center>
+                                <label>Selecione o fornecedor</label>
+                                <div id="fornPedidosDoDia">
+
+                                </div>
+                                <a data-role="button" data-theme="b" data-inline="true" onclick="getProdutosVendidos();">Carregar Produtos</a>
+
+                                <div id="relatorioCompras" style="background-color: white;">
+                                    <div id="relHeader">
+
+                                    </div>
+                                    <table data-role="table" data-mode="columntoggle:none" class="ui-responsive" id="table_produtosDoDia">
+                                        <thead>
+                                            <tr>
+                                                <th>Cód.</th>
+                                                <th>Descrição</th>
+                                                <th>Quantidade</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <input type="button" data-theme="a" id="btnGerarRel" value="Gerar PDF" onclick="salvarPDF()" data-inline="true">
+                            </center>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-role="footer" data-position="fixed">
+                    <h1>&copy 2016</h1>
+                </div>
+
+                <div id="menu" data-theme="a" data-role="panel" data-position="left" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center><h1 class="texto" style='color: white;'>Menu Principal</h1></center>
+
+                    <ul data-role="listview" data-theme="c" data-inset="true">
+
+                        <li><a href="#cadPedido" class="ui-btn ui-icon-shop ui-btn-icon-left">Realizar Venda</a></li>
+                        <li><a href="#cadCliente" class="ui-btn ui-icon-user ui-btn-icon-left">Cadastrar Cliente</a></li>
+                        <li><a href="#cadProduto" class="ui-btn ui-icon-tag ui-btn-icon-left">Cadastrar Produto</a></li>
+                        <li><a href="#cadFornecedor" class="ui-btn ui-icon-plus ui-btn-icon-left">Cadastrar Fornecedor</a></li>
+                        <li><a href="#consultas" class="ui-btn ui-icon-search ui-btn-icon-left">Consultas ...</a></li>
+                    </ul>
+                </div>
+
+                <div id="info" data-theme="a" data-role="panel" data-position="right" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center>
+                        <h3 class="texto" style='color: white;'>Sobre</h3>
+                        <p style="color: white;">O FinalSales é um sistema para auxiliar você em suas vendas! Ajude-nos a sempre melhorar respondendo nosso questinário abaixo.</p>
+                        <a href="#popupMap" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Abrir Questionário</a>
+                        <div data-role="popup" id="popupMap" data-overlay-theme="a" data-theme="a" data-corners="false" data-tolerance="15,15">
+                            <a href="#" data-rel="back" class="ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                            <iframe src="https://goo.gl/forms/kaItFD6ssDbB2YRs2" width="100%" height="320" seamless=""></iframe>
+                        </div>
+                    </center>
+                </div>
+            </div>
+
+
+            <!-- Cadastro de Clientes  -->
+            <div id="cadCliente" data-role="page" data-theme="d">
+                <div data-role="header" data-position="fixed">
+                    <h1 class="texto">Final Sales</h1>
+                    <a href="#menu" class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext" data-transition="pop">Menu</a>
+                </div>
+
+                <div data-role="content" data-theme="a">
+                    <center>
+                        <a href="index.html" rel="external" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-notext">Início</a>
+                        <h2 class="texto">Cadastro de Cliente</h2>
+                    </center>
+                    <form onsubmit="cadCliente(); return false;" action="index.html#cadCliente">
+                        <input type="hidden" id="txt_idCli">
+
+                        <label>Nome</label>
+                        <input type="text" id="txt_nomeCli" placeholder="Nome do Cliente" required>
+
+                        <label>Telefone</label>
+                        <input type="tel" id="txt_telefoneCli" placeholder="Telefone celular do Cliente" required>
+
+                        <label>Nascimento</label>
+                        <input type="date" id="txt_nascimentoCli">
+
+
+                        <label>Observações</label>
+                        <textarea cols="40" rows="8" name="textarea" id="txt_obsCli" placeholder="Ex.: Familiares, produtos favoritos, etc."></textarea>
+
+                        <center>
+                            <input type="submit" data-role="button" data-theme="b" data-inline="true" value="Salvar">
+                            <a href="index.html" data-role="button" rel="external" data-inline="true">Cancelar</a>
+                        </center>
+                    </form>
+
+                </div>
+
+                <div data-role="footer" data-position="fixed">
+                    <h1>&copy 2016</h1>
+                </div>
+
+                <div id="menu" data-theme="a" data-role="panel" data-position="left" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center><h1 class="texto" style='color: white;'>Menu Principal</h1></center>
+
+                    <ul data-role="listview" data-theme="c" data-inset="true">
+                        <li><a href="#cadPedido" class="ui-btn ui-icon-shop ui-btn-icon-left">Realizar Venda</a></li>
+                        <li><a href="#cadCliente" class="ui-btn ui-icon-user ui-btn-icon-left">Cadastrar Cliente</a></li>
+                        <li><a href="#cadProduto" class="ui-btn ui-icon-tag ui-btn-icon-left">Cadastrar Produto</a></li>
+                        <li><a href="#cadFornecedor" class="ui-btn ui-icon-plus ui-btn-icon-left">Cadastrar Fornecedor</a></li>
+                        <li><a href="#consultas" class="ui-btn ui-icon-search ui-btn-icon-left">Consultas ...</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- Cadastro de Produto-->
+            <div id="cadProduto" data-role="page" data-theme="d">
+                <div data-role="header" data-position="fixed">
+                    <h1 class="texto">Final Sales</h1>
+                    <a href="#menu" class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext" data-transition="pop">Menu</a>
+
+                </div>
+
+                <div data-role="content" data-theme="a">
+                    <center>
+                        <a href="index.html" rel="external" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-notext">Início</a>
+                        <h2 class="texto">Cadastro de Produto</h2>
+                    </center>
+
+                    <form onsubmit="cadProduto(); return false;" action="index.html#cadProduto">   
+                        <label>Código</label>
+                        <input type="text" name="codigo" id="txt_codProd" placeholder="Código de referência do produto" required>
+
+                        <label>Nome</label>
+                        <input type="text" name="nome" id="txt_nomeProd" placeholder="Digite o nome do produto" required>
+
+                        <label>Preço</label>
+                        <input type="number" step=0.01 name="preco" id="txt_precoProd" placeholder="Preço do produto" required>
+
+                        <label>Qtd. de estoque</label>
+                        <input type="number" name="preco" id="txt_qtdProd" placeholder="Quantidade em estoque" value="0" required>
+
+                        <label>Durabilidade</label>
+                        <input type="number" name="preco" id="txt_durabilidadeProd" placeholder="Tempo de duraçao do produto (em meses)" required>
+
+                        <script>
+                            obterFornecedores("fornecedores", "txt_fornecedoresProd");
+                        </script>
+
+                        <label>Fornecedor</label>
+                        <div id="fornecedores">
+
+                        </div>
+
+                        <center>
+                            <input type="submit" data-theme="b" data-role="button" data-inline="true" value="Salvar">
+                            <a href="index.html" rel="external" data-role="button" data-inline="true">Cancelar</a>
+                        </center>
+                    </form>
+
+                </div>
+
+                <div data-role="footer" data-position="fixed">
+                    <h1>&copy 2016</h1>
+                </div>
+
+                <div id="menu" data-theme="a" data-role="panel" data-position="left" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center><h1 class="texto" style='color: white;'>Menu Principal</h1></center>
+
+                    <ul data-role="listview" data-theme="c" data-inset="true">
+                        <li><a href="#cadPedido" class="ui-btn ui-icon-shop ui-btn-icon-left">Realizar Venda</a></li>
+                        <li><a href="#cadCliente" class="ui-btn ui-icon-user ui-btn-icon-left">Cadastrar Cliente</a></li>
+                        <li><a href="#cadProduto" class="ui-btn ui-icon-tag ui-btn-icon-left">Cadastrar Produto</a></li>
+                        <li><a href="#cadFornecedor" class="ui-btn ui-icon-plus ui-btn-icon-left">Cadastrar Fornecedor</a></li>
+                        <li><a href="#consultas" class="ui-btn ui-icon-search ui-btn-icon-left">Consultas ...</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cadastrar Fornecedor -->
+            <div id="cadFornecedor" data-role="page" data-theme="d">
+                <div data-role="header" data-position="fixed">
+                    <h1 class="texto">Final Sales</h1>
+                    <a href="#menu" class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext" data-transition="pop">Menu</a>
+                </div>
+
+                <div data-role="content" data-theme="a">
+                    <center>
+                        <a href="index.html" rel="external" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-notext">Início</a>
+                        <h2 class="texto">Cadastro de Fornecedor</h2>
+                    </center>
+
+                    <form onsubmit="cadFornecedor(); return false;" action="index.html#cadFornecedor">  
+                        <input type="hidden" name="id" id="txt_idForn">
+
+                        <label>Nome</label>
+                        <input type="text" name="nome" id="txt_nomeForn" placeholder="Digite o nome do fornecedor (ex.: Avon, Jequiti, etc...)" required>
+
+                        <label>Telefone</label>
+                        <input type="number" name="telefone" id="txt_telForn" placeholder="Digite o telefone de contato com o fornecedor" required>
+
+                        <center>
+                            <input type="submit" data-theme="b" data-role="button" data-inline="true" value="Salvar">
+                            <a href="index.html" rel="external" data-role="button" data-inline="true">Cancelar</a>
+                        </center>
+                    </form>
+
+                </div>
+
+                <div data-role="footer" data-position="fixed">
+                    <h1>&copy 2016</h1>
+                </div>
+
+                <div id="menu" data-theme="a" data-role="panel" data-position="left" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center><h1 class="texto" style='color: white;'>Menu Principal</h1></center>
+
+                    <ul data-role="listview" data-theme="c" data-inset="true">
+                        <li><a href="#cadPedido" class="ui-btn ui-icon-shop ui-btn-icon-left">Realizar Venda</a></li>
+                        <li><a href="#cadCliente" class="ui-btn ui-icon-user ui-btn-icon-left">Cadastrar Cliente</a></li>
+                        <li><a href="#cadProduto" class="ui-btn ui-icon-tag ui-btn-icon-left">Cadastrar Produto</a></li>
+                        <li><a href="#cadFornecedor" class="ui-btn ui-icon-plus ui-btn-icon-left">Cadastrar Fornecedor</a></li>
+                        <li><a href="#consultas" class="ui-btn ui-icon-search ui-btn-icon-left">Consultas ...</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Gerar Pedido -->
+            <div id="cadPedido" data-role="page" data-theme="d">
+                <div data-role="header" data-position="fixed">
+                    <h1 class="texto">Final Sales</h1>
+                    <a href="#menu" class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext" data-transition="pop">Menu</a>
+                </div>
+
+                <div data-role="content" data-theme="a">
+                    <center>
+                        <a href="index.html" rel="external" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-notext">Início</a>
+                        <h2 class="texto">Gerar Pedido</h2>
+                    </center>
+                    <script>
+                        obterClientes("div_clientes");
+                        obterProdutos("div_produtos");
+                    </script>
+
+
+                    <form onsubmit="gerarPedido(); return false;" action="index.html#cadPedido">   
+                        <input type="hidden" id="txt_idPed">
+
+                        <label>Nome do cliente</label>
+                        <div id="div_clientes">
+
+                        </div>
+
+                        <label>Prazo de pagamento (em dias)</label>
+                        <input id="txt_prazo" type="number" placeholder="para pagamentos a vista, digite 0" required> 
+
+                        <label>Pago?
+                            <input id="txt_pago" type="checkbox">
+                        </label>
+
+                        <label>Produtos</label>
+                        <div id="div_produtos">
+
+                        </div>
+
+                        <button id="btn_addItem" data-role="button" class="texto" data-inline="true" data-theme="a">Adicionar Produto</button>
+
+                        <center>
+                            <table data-role="table" class="ui-responsive" id="table_itemPedido">
+                                <thead>
+                                    <tr>
+                                        <th>Cód.</th>
+                                        <th>Descrição</th>
+                                        <th>Preço</th>
+                                        <th>Quantidade</th>
+                                        <th>Remover</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                            <button id="btn_calcTotal" data-role="button" class="texto" data-inline="true" data-theme="b">Calcular Total</button>
+                        </center>
+
+                        <label>Total: </label>
+                        <input id='txt_total' readonly type='number' data-inline="true">
+
+
+
+
+                        <center>
+                            <input type="submit" data-theme="b" data-role="button" data-inline="true" value="Salvar">
+                            <a href="index.html" rel="external" data-role="button" data-inline="true">Cancelar</a>
+                        </center>
+                    </form>
+
+                </div>
+
+                <div data-role="footer" data-position="fixed">
+                    <h1>&copy 2016</h1>
+                </div>
+
+                <div id="menu" data-theme="a" data-role="panel" data-position="left" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center><h1 class="texto" style='color: white;'>Menu Principal</h1></center>
+
+                    <ul data-role="listview" data-theme="c" data-inset="true">
+                        <li><a href="#cadPedido" class="ui-btn ui-icon-shop ui-btn-icon-left">Realizar Venda</a></li>
+                        <li><a href="#cadCliente" class="ui-btn ui-icon-user ui-btn-icon-left">Cadastrar Cliente</a></li>
+                        <li><a href="#cadProduto" class="ui-btn ui-icon-tag ui-btn-icon-left">Cadastrar Produto</a></li>
+                        <li><a href="#cadFornecedor" class="ui-btn ui-icon-plus ui-btn-icon-left">Cadastrar Fornecedor</a></li>
+                        <li><a href="#consultas" class="ui-btn ui-icon-search ui-btn-icon-left">Consultas ...</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- Consultas -->
+            <div id="consultas" data-role="page" data-theme="d">
+                <div data-role="header" data-position="fixed">
+                    <h1 class="texto">Final Sales</h1>
+                    <a href="#menu" class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext" data-transition="pop">Menu</a>
+                </div>
+
+                <div data-role="content" data-theme="a">
+                    <center>
+                        <a href="index.html" rel="external" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-notext">Início</a>
+                        <h2 class="texto">Consultas</h2>
+                    </center>
+
+                    <label>Tipo de consulta</label>
+                    <select id='tipo_consulta' data-theme='c'>
+                        <option value='0'>Selecione ...</option>
+                        <option value='1'>Vendas</option>
+                        <option value='2'>Produtos</option>
+                        <option value='3'>Clientes</option>
+                        <option value='4'>Fornecedores</option>
+                    </select>
+
+                    <center>
+                        <ul id="cons_results" data-role='listview' data-filter='true' data-filter-placeholder='Filtro...'>
+
+                        </ul>
+                    </center>
+
+                </div>
+
+                <div data-role="footer" data-position="fixed">
+                    <h1>&copy 2016</h1>
+                </div>
+
+                <div id="menu" data-theme="a" data-role="panel" data-position="left" data-display="push" style="background-image: url('images/back-menu.jpg') ;">
+                    <center><h1 class="texto" style='color: white;'>Menu Principal</h1></center>
+
+                    <ul data-role="listview" data-theme="c" data-inset="true">
+                        <li><a href="#cadPedido" class="ui-btn ui-icon-shop ui-btn-icon-left">Realizar Venda</a></li>
+                        <li><a href="#cadCliente" class="ui-btn ui-icon-user ui-btn-icon-left">Cadastrar Cliente</a></li>
+                        <li><a href="#cadProduto" class="ui-btn ui-icon-tag ui-btn-icon-left">Cadastrar Produto</a></li>
+                        <li><a href="#cadFornecedor" class="ui-btn ui-icon-plus ui-btn-icon-left">Cadastrar Fornecedor</a></li>
+                        <li><a href="#consultas" class="ui-btn ui-icon-search ui-btn-icon-left">Consultas ...</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="carregando">
+            <div data-role="content">
+                <center>
+                    <img src="css/images/ajax-loader.gif"/>
+                    <h1>CARREGANDO</h1>
+                </center>
+            </div>
+        </div>
+
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js"></script>
+        <script src="js/jspdf.min.js"></script>
+        <script src="js/html2canvas.js"></script>
+        <script src="js/indexFuncoes.js"></script>
+        <script src="js/autoNumeric.js"></script>
+        <script src="js/jquery.maskedinput.js"></script>
+    </body>
+</html>

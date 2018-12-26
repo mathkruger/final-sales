@@ -1,0 +1,18 @@
+@font-face{
+	font-family: "lobster";
+	src: url("fonts/lobster1.4.ttf")format("truetype");
+}
+
+.itemPedDescr{}
+
+.itemPedQtd{}
+
+.btnCobrar{}
+
+.texto{
+	font-family: "lobster";
+}
+
+#cons_results li{
+	cursor: pointer;
+}
